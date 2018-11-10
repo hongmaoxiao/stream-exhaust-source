@@ -8,7 +8,15 @@ function resumer(stream) {
     return stream;
   }
 
-  stream._read ? stream.pipe(new Sink) : stream.resume();
+  if (stream._read) {
+    stream.pipe(new Sink);
+    return stream;
+  }
+
+  if (typeof stream.resume === 'function') {
+    stream.resume();
+    return stream;
+  }
 
   return stream;
 }
